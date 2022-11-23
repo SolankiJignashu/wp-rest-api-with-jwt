@@ -1,7 +1,6 @@
 === WordPress REST API WITH JWT TOKEN ===
 
 Contributors:      Jignashu Solanki
-
 Tags:              REST API, JWT
 
 Tested up to:      6.0
