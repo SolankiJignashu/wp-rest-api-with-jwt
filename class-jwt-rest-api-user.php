@@ -11,7 +11,7 @@ use \Firebase\JWT\JWT;
  */
 
 /**
- * ALl the common function related to teachers progress.
+ * ALl the common function related to REST API
  */
 class JWT_Rest_Api_User {
 

@@ -9,7 +9,7 @@
  */
 
 /**
- * ALl the common function related to teachers progress.
+ * ALl the common function related to User Operations.
  */
 
 class WP_User_Operations {
