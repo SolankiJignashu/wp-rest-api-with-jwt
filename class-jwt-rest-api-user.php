@@ -123,8 +123,8 @@ class JWT_Rest_Api_User {
 	public function wp_rest_api_user_deactivate_callback( $data ) {
 		# code...
 		$user_id                    = $this->user_id;
-		$Whitehatjr_User_Operations = new Whitehatjr_User_Operations();
-		$Whitehatjr_User_Operations->wp_user_deactivate( $user_id );
+		$WP_User_Operations = new WP_User_Operations();
+		$WP_User_Operations->wp_user_deactivate( $user_id );
 		$this->wp_rest_api_error( 'User Deactivated. email ->' . $this->email );
 		$result   = array( 'success' => 'Operation Performed Successfully!!' );
 		$response = new WP_REST_Response( $result, 200 ); // data => array of returned data
@@ -134,8 +134,8 @@ class JWT_Rest_Api_User {
 	public function wp_rest_api_user_activate_callback( $data ) {
 		# code...
 		$user_id                    = $this->user_id;
-		$Whitehatjr_User_Operations = new Whitehatjr_User_Operations();
-		$Whitehatjr_User_Operations->wp_user_activate( $user_id );
+		$WP_User_Operations = new WP_User_Operations();
+		$WP_User_Operations->wp_user_activate( $user_id );
 		$this->wp_rest_api_error( 'User Activated. email ->' . $this->email );
 		$result   = array( 'success' => 'Operation Performed Successfully!!' );
 		$response = new WP_REST_Response( $result, 200 ); // data => array of returned data

@@ -16,14 +16,14 @@ class WP_User_Operations {
 
 	public function run() {
 		# code...
-		add_action( 'show_user_profile', array( $this, 'whj_disable_show_user_profile' ) );
-		add_action( 'edit_user_profile', array( $this, 'whj_disable_show_user_profile' ) );
-		add_action( 'personal_options_update', array( $this, 'whj_disable_save_user_profile' ), 1 );
-		add_action( 'edit_user_profile_update', array( $this, 'whj_disable_save_user_profile' ), 1 );
-		add_filter( 'authenticate', array( $this, 'whj_restrict_user_access' ), 100, 1 );
-		add_action( 'simple_jwt_login_login_hook', array( $this, 'whj_restrict_user_access' ), 10, 1 );
+		add_action( 'show_user_profile', array( $this, 'wp_disable_show_user_profile' ) );
+		add_action( 'edit_user_profile', array( $this, 'wp_disable_show_user_profile' ) );
+		add_action( 'personal_options_update', array( $this, 'wp_disable_save_user_profile' ), 1 );
+		add_action( 'edit_user_profile_update', array( $this, 'wp_disable_save_user_profile' ), 1 );
+		add_filter( 'authenticate', array( $this, 'wp_restrict_user_access' ), 100, 1 );
+		add_action( 'simple_jwt_login_login_hook', array( $this, 'wp_restrict_user_access' ), 10, 1 );
 	}
-	public function whj_restrict_user_access( $user ) {
+	public function wp_restrict_user_access( $user ) {
 		if ( empty( $user ) ) {
 			return $user;
 		}
@@ -39,7 +39,7 @@ class WP_User_Operations {
 		// echo '</pre>';
 		// exit;
 		$user_id = $user->ID;
-		$status  = $this->whj_get_user_status( $user_id );
+		$status  = $this->wp_get_user_status( $user_id );
 		if ( $status == 'deactive' ) {
 			$sessions = WP_Session_Tokens::get_instance( $user_id );
 			$sessions->destroy_all();
@@ -49,7 +49,7 @@ class WP_User_Operations {
 		// exit;
 		return $user;
 	}
-	public function whj_disable_save_user_profile( $user_id ) {
+	public function wp_disable_save_user_profile( $user_id ) {
 		# code...
 		if ( ! current_user_can( 'edit_users' ) ) {
 			return;
@@ -58,19 +58,19 @@ class WP_User_Operations {
 		if ( empty( $user_id ) ) {
 			return;
 		}
-		if ( ( isset( $_POST['whj_deactivate_user'] ) ) && ( ! empty( $_POST['whj_deactivate_user'] ) ) && ( intval( $_POST['whj_deactivate_user'] ) === intval( $user_id ) ) ) {
-			$this->whj_user_deactivate( $user_id );
+		if ( ( isset( $_POST['wp_deactivate_user'] ) ) && ( ! empty( $_POST['wp_deactivate_user'] ) ) && ( intval( $_POST['wp_deactivate_user'] ) === intval( $user_id ) ) ) {
+			$this->wp_user_deactivate( $user_id );
 		} else {
-			$this->whj_user_activate( $user_id );
+			$this->wp_user_activate( $user_id );
 		}
 	}
-	public function whj_disable_show_user_profile( WP_User $user ) {
+	public function wp_disable_show_user_profile( WP_User $user ) {
 		# code...
 		if ( ! current_user_can( 'edit_users' ) ) {
 			return '';
 		}
 		$user_id   = $user->ID;
-		$j_disable = get_user_meta( $user_id, 'whj_deactivate_user', true );
+		$j_disable = get_user_meta( $user_id, 'wp_deactivate_user', true );
 		$checked   = '';
 		if ( ! empty( $j_disable ) ) {
 			$checked = "checked='checked'";
@@ -78,35 +78,35 @@ class WP_User_Operations {
 		?>
 	<table class="form-table">
 		<tr>
-			<th><?php echo __( 'Deactivate User Login', 'whj_wp' ); ?></th>
-			<td><input type="checkbox" name="whj_deactivate_user" value="<?php echo $user_id; ?>" <?php echo $checked; ?>></td>
+			<th><?php echo __( 'Deactivate User Login', 'wp_wp' ); ?></th>
+			<td><input type="checkbox" name="wp_deactivate_user" value="<?php echo $user_id; ?>" <?php echo $checked; ?>></td>
 		</tr>
 	</table>
 
 		<?php
 	}
-	public function whj_user_deactivate( $user_id ) {
+	public function wp_user_deactivate( $user_id ) {
 		# code...
 		// $user_id = $this->user_id;
-		update_user_meta( $user_id, 'whj_deactivate_user', current_time( 'Y-m-d H:i:s' ) );
+		update_user_meta( $user_id, 'wp_deactivate_user', current_time( 'Y-m-d H:i:s' ) );
 		$user = new WP_User( $user_id );
 		$user->set_role( 'deactivated' );
 		$sessions = WP_Session_Tokens::get_instance( $user_id );
 		$sessions->destroy_all();
 		return true;
 	}
-	public function whj_user_activate( $user_id ) {
+	public function wp_user_activate( $user_id ) {
 		# code...
 		// $user_id = $this->user_id;
-		delete_user_meta( $user_id, 'whj_deactivate_user' );
+		delete_user_meta( $user_id, 'wp_deactivate_user' );
 		$user = new WP_User( $user_id );
 		$user->set_role( 'subscriber' );
 
 		return true;
 	}
-	public function whj_get_user_status( $user_id ) {
+	public function wp_get_user_status( $user_id ) {
 		# code...
-		$status = get_user_meta( $user_id, 'whj_deactivate_user', true );
+		$status = get_user_meta( $user_id, 'wp_deactivate_user', true );
 		if ( ! empty( $status ) ) {
 			return 'deactive';
 		}
