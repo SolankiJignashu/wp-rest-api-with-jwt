@@ -22,5 +22,6 @@ Plugin allows to activate and deactivate user using REST API. It requires jwt to
 
 
 == CURL Example for User Activate == 
+
 `curl --location --request POST 'https://example.com/wp-json/wp/v1/user_activate' \
 --header 'payload: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImppZ25hc2h1LnNvbGFua2lAd2hpdGVoYXRqci5jb20ifQ.riQciAWuy7-hhttAMCwRLaxm0_zXlSOpoY37-77vi1U'`
